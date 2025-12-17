@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ForYou</title>
+    <link rel="icon" href="gift.png" type="image/png">
+    <style>
+        body {
+            display: flex;
+           align-items: flex-end;
+           justify-content: center;
+           min-height: 100vh;
+            background-color: var(--dark-color);
+           overflow: hidden;
+           perspective: 1000px;
+        }
+
+        :root {
+            --dark-color: #000;
+        }
+
+        .text {
+            position: absolute;
+            width: 100%;
+            text-align: center;
+            margin-top: 50px;
+            top: 0;
+            left: 0;
+            color: #4a0a50;
+            font-family: 'Courier New', Courier, monospace;
+            font-size: 75px;
+            text-shadow: 0 0 20px #fff;
+        }
+
+        canvas {
+            position: absolute;
+            top: 0;
+            left: 0;
+            z-index: -1;
+        }
+    </style>
+</head>
+<body>
+    <canvas id="canvas"></canvas>
+    <!--Text-->
+    <h1 class="text"><span id="text"></span></h1>
+    
+    <script src="scriptend.js"></script>
+</body>
+</html>

@@ -1,0 +1,253 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Happy Birthday Fathiya</title>
+    <link rel="icon" href="gift.png" type="image/png">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            background: linear-gradient(135deg, #0a0a2e 0%, #16213e 50%, #0a0a2e 100%);
+            overflow: hidden;
+            font-family: 'Arial', sans-serif;
+        }
+        
+        canvas {
+            display: block;
+        }
+        
+        .title {
+            position: absolute;
+            top: 50px;
+            left: 50%;
+            transform: translateX(-50%);
+            font-size: 4em;
+            font-weight: bold;
+            color: transparent;
+            background: linear-gradient(45deg, #ff6ec7, #a06ee1, #7b68ee, #ff6ec7);
+            background-size: 300% 300%;
+            -webkit-background-clip: text;
+            background-clip: text;
+            text-shadow: 0 0 30px rgba(255, 110, 199, 0.5),
+                         0 0 60px rgba(160, 110, 225, 0.3);
+            animation: gradient 3s ease infinite, glow 2s ease-in-out infinite;
+            white-space: nowrap;
+        }
+        
+        @keyframes gradient {
+            0%, 100% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+        }
+        
+        @keyframes glow {
+            0%, 100% { 
+                text-shadow: 0 0 30px rgba(255, 110, 199, 0.5),
+                           0 0 60px rgba(160, 110, 225, 0.3);
+            }
+            50% { 
+                text-shadow: 0 0 40px rgba(255, 110, 199, 0.8),
+                           0 0 80px rgba(160, 110, 225, 0.5),
+                           0 0 100px rgba(123, 104, 238, 0.3);
+            }
+        }
+
+        @media (max-width: 768px) {
+            .title {
+                font-size: 2.5em;
+                top: 30px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="title" id="title"></div>
+    <canvas id="canvas"></canvas>
+
+    <script>
+        // Efek typing untuk title
+        const titles = ('Happy Birthday Fathiya').split('');
+        const titleElement = document.getElementById('title');
+        let index = 0;
+
+        function appendTitle() {
+            if (index < titles.length) {
+                titleElement.innerHTML += titles[index];
+                index++;
+                setTimeout(appendTitle, 150);
+            }
+        }
+        
+        // Panggil fungsi typing
+        appendTitle();
+        
+        // Canvas animation
+        const canvas = document.getElementById('canvas');
+        const ctx = canvas.getContext('2d');
+        
+        canvas.width = window.innerWidth;
+        canvas.height = window.innerHeight;
+        
+        window.addEventListener('resize', () => {
+            canvas.width = window.innerWidth;
+            canvas.height = window.innerHeight;
+        });
+
+        // Particles untuk background
+        const particles = [];
+        for (let i = 0; i < 150; i++) {
+            particles.push({
+                x: Math.random() * canvas.width,
+                y: Math.random() * canvas.height,
+                size: Math.random() * 3 + 1,
+                speedY: Math.random() * 1 + 0.5,
+                speedX: (Math.random() - 0.5) * 0.5,
+                opacity: Math.random() * 0.5 + 0.3
+            });
+        }
+
+        // Bentuk Kue Ulang Tahun
+        const cakeParticles = [];
+        const centerX = canvas.width / 2;
+        const centerY = canvas.height / 2 + 80;
+        
+        // Layer 1 (Bottom) - Persegi panjang
+        for (let x = -180; x <= 180; x += 4) {
+            for (let y = 0; y <= 90; y += 4) {
+                cakeParticles.push({
+                    x: centerX + x,
+                    y: centerY + y,
+                    size: 2.5,
+                    color: `hsl(${320 + Math.random() * 40}, 70%, 60%)`,
+                    delay: Math.random() * 100
+                });
+            }
+        }
+        
+        // Layer 2 (Middle) - Persegi panjang lebih kecil
+        for (let x = -135; x <= 135; x += 4) {
+            for (let y = -90; y <= 0; y += 4) {
+                cakeParticles.push({
+                    x: centerX + x,
+                    y: centerY + y,
+                    size: 2.5,
+                    color: `hsl(${280 + Math.random() * 40}, 70%, 65%)`,
+                    delay: Math.random() * 100
+                });
+            }
+        }
+        
+        // Layer 3 (Top) - Persegi panjang paling kecil
+        for (let x = -90; x <= 90; x += 4) {
+            for (let y = -180; y <= -90; y += 4) {
+                cakeParticles.push({
+                    x: centerX + x,
+                    y: centerY + y,
+                    size: 2.5,
+                    color: `hsl(${240 + Math.random() * 40}, 70%, 70%)`,
+                    delay: Math.random() * 100
+                });
+            }
+        }
+
+        // Lilin - 5 buah
+        const candles = [];
+        const candlePositions = [-90, -45, 0, 45, 90];
+        
+        candlePositions.forEach(xPos => {
+            // Batang lilin
+            for (let y = -225; y <= -180; y += 3) {
+                cakeParticles.push({
+                    x: centerX + xPos,
+                    y: centerY + y,
+                    size: 2.5,
+                    color: '#ffeb3b',
+                    delay: Math.random() * 100
+                });
+            }
+            
+            // Api lilin
+            candles.push({
+                x: centerX + xPos,
+                y: centerY - 225,
+                phase: Math.random() * Math.PI * 2
+            });
+        });
+
+
+
+        let frame = 0;
+
+        function animate() {
+            ctx.fillStyle = 'rgba(10, 10, 46, 0.1)';
+            ctx.fillRect(0, 0, canvas.width, canvas.height);
+            
+            // Background particles
+            particles.forEach(p => {
+                ctx.beginPath();
+                ctx.arc(p.x, p.y, p.size, 0, Math.PI * 2);
+                ctx.fillStyle = `rgba(255, 255, 255, ${p.opacity})`;
+                ctx.fill();
+                
+                p.y -= p.speedY;
+                p.x += p.speedX;
+                
+                if (p.y < 0) p.y = canvas.height;
+                if (p.x < 0) p.x = canvas.width;
+                if (p.x > canvas.width) p.x = 0;
+            });
+            
+            // Kue particles
+            cakeParticles.forEach((p, i) => {
+                if (frame > p.delay) {
+                    ctx.beginPath();
+                    ctx.arc(p.x, p.y, p.size, 0, Math.PI * 2);
+                    ctx.fillStyle = p.color;
+                    ctx.shadowBlur = 10;
+                    ctx.shadowColor = p.color;
+                    ctx.fill();
+                    ctx.shadowBlur = 0;
+                }
+            });
+
+            // Api lilin dengan efek bergerak
+            candles.forEach(candle => {
+                const flicker = Math.sin(frame * 0.1 + candle.phase) * 3;
+                
+                // Outer glow
+                const gradient = ctx.createRadialGradient(
+                    candle.x, candle.y + flicker, 0,
+                    candle.x, candle.y + flicker, 15
+                );
+                gradient.addColorStop(0, 'rgba(255, 200, 0, 0.8)');
+                gradient.addColorStop(0.5, 'rgba(255, 100, 0, 0.4)');
+                gradient.addColorStop(1, 'rgba(255, 0, 0, 0)');
+                
+                ctx.fillStyle = gradient;
+                ctx.fillRect(candle.x - 15, candle.y + flicker - 15, 30, 30);
+                
+                // Inner flame
+                ctx.beginPath();
+                ctx.ellipse(candle.x, candle.y + flicker, 4, 6, 0, 0, Math.PI * 2);
+                ctx.fillStyle = '#ffeb3b';
+                ctx.fill();
+                
+                ctx.beginPath();
+                ctx.ellipse(candle.x, candle.y + flicker, 2, 4, 0, 0, Math.PI * 2);
+                ctx.fillStyle = '#fff';
+                ctx.fill();
+            });
+            
+            frame++;
+            requestAnimationFrame(animate);
+        }
+        
+        animate();
+    </script>
+</body>
+</html>
